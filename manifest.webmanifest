@@ -1,7 +1,7 @@
 {
   "id": "/Meus-Gastos/app-meus-gastos",
-  "name": "Meus Gastos",
-  "short_name": "Meus Gastos",
+  "name": "Finanças",
+  "short_name": "Finanças",
   "description": "Controle de contas, cartões, receitas e despesas pessoais e da empresa.",
   "lang": "pt-BR",
   "start_url": "./",
