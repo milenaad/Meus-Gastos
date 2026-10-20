@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Meus Gastos</title>
-<meta name="theme-color" content="#1a1a19">
+<meta name="theme-color" content="#0a7f78">
 <meta name="description" content="Controle de contas, cartões, receitas e despesas pessoais e da empresa.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -49,6 +49,17 @@ img { max-width: 100%; }
   --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
   color-scheme: dark;
 }
+/* Cor de cada lado: Pessoal = verde-água, Empresa = roxo. Muda faixa do topo, fundo, botões e abas. */
+:root[data-ctx="pessoal"] { --accent: #0a7f78; --on: #ffffff; --bg: #e6f4f2; --surface: #fbfefd; --s1: #0a7f78; }
+:root[data-ctx="empresa"] { --accent: #6b2fc9; --on: #ffffff; --bg: #efe9fa; --surface: #fdfcff; --s1: #6b2fc9; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-ctx="pessoal"] { --accent: #35d0c4; --on: #06201e; --bg: #06100f; --surface: #0f1f1d; --s1: #35d0c4; }
+  :root:not([data-theme="light"])[data-ctx="empresa"] { --accent: #a98cf2; --on: #170a33; --bg: #0b0714; --surface: #1a1229; --s1: #a98cf2; }
+}
+:root[data-theme="dark"][data-ctx="pessoal"] { --accent: #35d0c4; --on: #06201e; --bg: #06100f; --surface: #0f1f1d; --s1: #35d0c4; }
+:root[data-theme="dark"][data-ctx="empresa"] { --accent: #a98cf2; --on: #170a33; --bg: #0b0714; --surface: #1a1229; --s1: #a98cf2; }
+body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 6px; background: var(--accent); z-index: 40; }
+.ctxpill { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 3px 10px; border-radius: 999px; background: var(--accent); color: var(--on); font-family: var(--body); font-size: 12px; font-weight: 600; letter-spacing: 0; }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.4; }
 button { font: inherit; color: inherit; cursor: pointer; }
@@ -62,12 +73,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 3px; gap: 3px; }
 .seg.seg3 { grid-template-columns: repeat(3, 1fr); }
 .seg button { border: 0; background: none; border-radius: 9px; padding: 10px 6px; font-weight: 600; color: var(--ink2); min-width: 0; }
-.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on); }
 
 .pbar { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip { border: 1px solid var(--axis); background: none; border-radius: 999px; padding: 6px 14px; font-weight: 500; color: var(--ink2); }
-.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on); }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .navlab { flex: 1; text-align: center; font-family: var(--display); font-weight: 600; font-size: 17px; }
 .ico { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; }
@@ -153,7 +164,7 @@ select, textarea, input[type=text], input[type=date], input[type=number], input:
 .switch .nm { flex: 1; }
 .sw { width: 40px; height: 24px; border-radius: 999px; background: var(--axis); position: relative; flex: none; }
 .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--surface); }
-.switch[aria-pressed="true"] .sw { background: var(--ink); }
+.switch[aria-pressed="true"] .sw { background: var(--accent); }
 .switch[aria-pressed="true"] .sw::after { left: 19px; }
 .switch .st { font-size: 13px; color: var(--muted); }
 
@@ -163,7 +174,7 @@ textarea { min-height: 110px; resize: vertical; }
 .addrow input { flex: 1; }
 .btn { border: 1px solid var(--axis); background: var(--surface); border-radius: 12px; padding: 11px 16px; font-weight: 600; }
 .btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 10px; white-space: nowrap; }
-.btn-primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn-primary { background: var(--accent); color: var(--on); border-color: var(--accent); }
 .btn-danger { color: var(--danger); border-color: var(--danger); background: none; }
 .btn[disabled] { opacity: .5; }
 .empty { text-align: center; padding: 28px 8px; color: var(--ink2); }
@@ -174,9 +185,9 @@ textarea { min-height: 110px; resize: vertical; }
 
 #nav { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; z-index: 10; display: flex; background: var(--surface); border-top: 1px solid var(--line); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
 #nav button { flex: 1; background: none; border: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; font-size: 12px; font-weight: 500; color: var(--muted); border-radius: 10px; min-width: 0; }
-#nav button[aria-current="page"] { color: var(--ink); font-weight: 600; }
+#nav button[aria-current="page"] { color: var(--accent); font-weight: 700; }
 #fab { position: fixed; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; bottom: calc(68px + env(safe-area-inset-bottom, 0px)); padding: 0 16px; display: flex; justify-content: flex-end; pointer-events: none; z-index: 10; }
-#fab button { pointer-events: auto; display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--surface); border: 0; border-radius: 999px; padding: 14px 20px; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+#fab button { pointer-events: auto; display: flex; align-items: center; gap: 8px; background: var(--accent); color: var(--on); border: 0; border-radius: 999px; padding: 14px 20px; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
 
 #sheet:empty { display: none; }
 .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 20; }
@@ -237,6 +248,9 @@ const S = { ctx: 'pessoal', tab: 'resumo', period: 'mes', y: now.getFullYear(), 
   f: { type: '', cat: '', sup: '', sec: '', acc: '' }, cad: 'acc', plan: 'orc', more: {}, loading: true, sheet: null, pend: null };
 const D = { cfg: normCfg(null), expenses: [] };
 try { const c0 = localStorage.getItem('financas:ctx'); if (c0 === 'empresa' || c0 === 'pessoal') S.ctx = c0; } catch (e) {}
+const THEME_COLOR = { pessoal: '#0a7f78', empresa: '#6b2fc9' };
+function paintCtx() { document.documentElement.setAttribute('data-ctx', S.ctx); const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', THEME_COLOR[S.ctx]); }
+paintCtx();
 
 function emptyCtx() { return { categories: [], incomeCats: [], suppliers: [], sectors: [], accounts: [], cards: [], goals: [], budgets: {}, hide: [] }; }
 function normCfg(c) {
@@ -424,7 +438,7 @@ function loadLocal() {
 
 /* ---------- peças de tela ---------- */
 function header() {
-  return '<header class="top"><div class="brand"><h1>Meus Gastos</h1>' +
+  return '<header class="top"><div class="brand"><h1>Meus Gastos<span class="ctxpill">' + CTX[S.ctx] + '</span></h1>' +
     (!S.loading && store.mode === 'local' ? '<span class="note">Salvo só neste aparelho</span>' : '') + '</div>' +
     '<div class="seg" role="group" aria-label="Conta">' +
     ['pessoal', 'empresa'].map(k => '<button data-act="ctx" data-v="' + k + '" aria-pressed="' + (S.ctx === k) + '">' + CTX[k] + '</button>').join('') +
@@ -808,6 +822,7 @@ function render() {
   const app = $('app'), prev = $('add-name');
   const pv = prev ? prev.value : '', had = prev && document.activeElement === prev;
   const body = S.loading ? '<div class="empty"><p>Carregando seus dados…</p></div>' : S.tab === 'resumo' ? resumo() : S.tab === 'lanc' ? lanc() : S.tab === 'plan' ? plan() : mais();
+  paintCtx();
   app.innerHTML = header() + body;
   const nw = $('add-name'); if (nw) { if (pv) nw.value = pv; if (had) nw.focus(); }
   $('nav').innerHTML = navHtml();
